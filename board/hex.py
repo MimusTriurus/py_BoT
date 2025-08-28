@@ -6,4 +6,4 @@ class Hex:
         self.unit = None
 
     def __repr__(self):
-        return f"Hex({self.x}, {self.y}, {self.terrain})"
+        return f"Hex({self.q}, {self.r}, {self.terrain})"

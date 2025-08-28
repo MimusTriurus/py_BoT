@@ -8,6 +8,11 @@ def hex_to_pixel(q, r, size):
     y = size * (3 ** 0.5 * (r + 0.5 * (q % 2))) + size
     return int(x), int(y)
 
+def hex_to_pixel_(q, r, size):
+    x = size * (3/2 * q) + size
+    y = size * (math.sqrt(3) * (r + 0.5 * (q % 2))) + size
+    return int(x), int(y)
+
 
 def hex_round(q, r):
     s = -q - r
@@ -35,6 +40,11 @@ def pixel_to_hex(px, py, size):
     q = int(px / (1.5 * size))
     r = int((py / (math.sqrt(3) * size)) - 0.5 * (q % 2))
     return q, r
+
+def pixel_to_hex_(px, py, size):
+    q = (2/3 * px) / size
+    r = (-1/3 * px + math.sqrt(3)/3 * py) / size
+    return hex_round(q, r)
 
 
 def hex_grid_fit(screen_width, screen_height, hex_size):

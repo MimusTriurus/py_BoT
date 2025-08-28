@@ -47,3 +47,18 @@ hex_tactics/
 │   ├── fonts/
 │
 └── saves/
+
+# Hex directions:
+0 — вверх
+1 — вверх-вправо
+2 — вниз-вправо
+3 — вниз
+4 — вниз-влево
+5 — вверх-влево
+
+# Keys
+||Key||Code||Desc||
+|1|49|movement|
+|2|50|attack|
+|3|51|rotate base|
+|4|52|rotate turret|
