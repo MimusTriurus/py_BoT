@@ -9,10 +9,6 @@ class BaseUnit:
             base_orientation: int = 0,
             turret_orientation: int = 0
     ):
-        """
-        :param base_orientation: направление шасси/базы 0-5 по часовой стрелке
-        :param turret_orientation: направление башни 0-5 по часовой стрелке
-        """
         self.name = name
         self.hp = hp
         self.attack = attack
@@ -26,7 +22,6 @@ class BaseUnit:
         self.turret_orientation = turret_orientation % 6
 
     def update_orientation(self, dq, dr):
-        # odd-q layout
         if self.position.q % 2 == 0:
             deltas = [(0,-1),(1,-1),(1,0),(0,1),(-1,0),(-1,-1)]
         else:

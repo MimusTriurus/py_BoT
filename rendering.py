@@ -55,8 +55,7 @@ def draw_unit(
     pygame.draw.line(surface, barrel_color, turret_center, (end_x, end_y), 3)
 
 
-def draw_hex(surface, center, size, hex_, highlight=False):
-    # выбор цвета по типу поверхности
+def draw_hex(surface, center, size, hex_, highlight=False, draw_hex_coord=False):
     terrain_colors = {
         "plain": (180, 220, 180),
         "swamp": (100, 150, 100),
@@ -66,7 +65,6 @@ def draw_hex(surface, center, size, hex_, highlight=False):
 
     color = terrain_colors.get(hex_.terrain, (200, 200, 200))
 
-    # координаты углов гекса
     points = []
     for i in range(6):
         angle = math.radians(60 * i)
@@ -74,13 +72,10 @@ def draw_hex(surface, center, size, hex_, highlight=False):
         dy = size * math.sin(angle)
         points.append((center[0] + dx, center[1] + dy))
 
-    # закраска
     pygame.draw.polygon(surface, color, points)
-    # рамка: жёлтая если highlight
     pygame.draw.polygon(surface, (255, 255, 0) if highlight else (50, 50, 50), points, 2)
 
-    # отрисовка текста (координаты)
-    if False:
+    if draw_hex_coord:
         font = pygame.freetype.SysFont(None, 12)
         text = f"[{hex_.q},{hex_.r}]"
         text_rect = font.get_rect(text)
