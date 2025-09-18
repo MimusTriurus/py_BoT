@@ -55,7 +55,15 @@ def draw_unit(
     pygame.draw.line(surface, barrel_color, turret_center, (end_x, end_y), 3)
 
 
-def draw_hex(surface, center, size, hex_, highlight=False, draw_hex_coord=False):
+def draw_hex(
+        surface,
+        center,
+        size,
+        hex_,
+        highlight=False,
+        highlight_color=(255, 255, 0),
+        draw_hex_coord=False
+):
     terrain_colors = {
         "plain": (180, 220, 180),
         "swamp": (100, 150, 100),
@@ -73,7 +81,7 @@ def draw_hex(surface, center, size, hex_, highlight=False, draw_hex_coord=False)
         points.append((center[0] + dx, center[1] + dy))
 
     pygame.draw.polygon(surface, color, points)
-    pygame.draw.polygon(surface, (255, 255, 0) if highlight else (50, 50, 50), points, 2)
+    pygame.draw.polygon(surface, highlight_color if highlight else (50, 50, 50), points, 2)
 
     if draw_hex_coord:
         font = pygame.freetype.SysFont(None, 12)

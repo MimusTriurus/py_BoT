@@ -3,7 +3,7 @@ from board.pathfinder import Pathfinder
 from rendering import draw_hex, draw_unit
 from utils.hex_helper import hex_to_pixel, pixel_to_hex, hex_grid_fit
 from units.tank import Tank
-from core.state import GameState
+from core.state import GameState, State
 from core.event_manager import EventManager
 from core.turn_manager import TurnManager
 
@@ -57,15 +57,34 @@ class Game:
 
         for row in self.state.grid.grid:
             for hex_ in row:
+                #if hex_ not in self.state.highlighted_hexes:
+                    center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
+                    draw_hex(self.screen, center, self.hex_size, hex_, highlight=False)
+
+        if self.state.value == State.Base:
+            if self.state.selected_hex:
+                center = hex_to_pixel(self.state.selected_hex.q, self.state.selected_hex.r, self.hex_size)
+                draw_hex(
+                    self.screen,
+                    center,
+                    self.hex_size,
+                    self.state.selected_hex,
+                    highlight=True,
+                    highlight_color=(255, 0, 0)
+                )
+        elif self.state.value == State.ReadyToMove:
+            for hex_ in self.state.highlighted_hexes:
                 center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
-                draw_hex(self.screen, center, self.hex_size, hex_, highlight=False)
+                draw_hex(self.screen, center, self.hex_size, hex_, highlight=True)
+            if self.state.pathfinder_hexes:
+                for hex_ in self.state.pathfinder_hexes:
+                    if hex_ in self.state.highlighted_hexes:
+                        center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
+                        draw_hex(self.screen, center, self.hex_size, hex_, highlight=True, highlight_color=(0, 0, 255))
 
         for row in self.state.grid.grid:
             for hex_ in row:
                 center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
-                highlight = hex_ in self.state.highlighted_hexes
-                if highlight:
-                    draw_hex(self.screen, center, self.hex_size, hex_, highlight=True)
                 if hex_.unit:
                     draw_unit(self.screen, center, self.hex_size, hex_.unit)
 

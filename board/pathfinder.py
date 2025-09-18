@@ -1,6 +1,9 @@
 import heapq
 import math
 
+from board.hex import Hex
+
+
 class Pathfinder:
     def __init__(self, grid):
         self.grid = grid
@@ -40,11 +43,14 @@ class Pathfinder:
                 reachable.append(current)
 
             for neighbor in self.neighbors(current):
-                if neighbor.unit is None:  # нельзя идти через занятый
+                if neighbor.unit is None:
                     new_dist = dist + self.terrain_costs[neighbor.terrain]
                     if new_dist <= move_range:
                         fringe.append((neighbor, new_dist))
         return reachable
+
+    def is_hex_reachable(self, hex: Hex):
+        return self.terrain_costs[hex.terrain] != math.inf
 
     def heuristic(self, a, b):
         aq, ar = a.q, a.r

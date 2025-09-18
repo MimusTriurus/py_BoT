@@ -1,21 +1,35 @@
+from typing import Optional, List
+
 import pygame
 
+from board.hex import Hex
 from board.hex_grid import HexGrid
 from rendering import draw_hex, draw_unit
 from units.base_unit import BaseUnit
 from utils.hex_helper import hex_to_pixel
+from enum import Enum
+
+class State(Enum):
+    Base = 0
+    ReadyToMove = 1
+    IsMoving = 2
+    ReadyToTurnBase = 3
+    ReadyToTurnTurret = 4
 
 
 class GameState:
     def __init__(self, cols, rows, hex_size):
-        self.grid = HexGrid(cols, rows)
+        self.grid: HexGrid = HexGrid(cols, rows)
         self.hex_size = hex_size
 
-        self.selected_unit = None
-        self.highlighted_hexes = []
-        self.selected_hex = None
+        self.selected_unit: Optional[BaseUnit] = None
+        self.highlighted_hexes: List[Hex] = []
+        self.pathfinder_hexes: List[Hex] = []
+        self.selected_hex: Optional[Hex] = None
 
         self.active_movement = None
+
+        self.value = State.Base
 
     def select_unit(self, unit: BaseUnit):
         self.selected_unit = unit
@@ -55,9 +69,11 @@ class GameState:
 
                 move["index"] += 1
                 move["progress"] = 0.0
-
+                # движение завершено
                 if move["index"] >= len(path) - 1:
-                    self.active_movement = None  # движение завершено
+                    self.active_movement = None
+                    self.value = State.Base
+                    self.pathfinder_hexes.clear()
 
     def animate_movement(self, unit: BaseUnit, path, surface, fps=30):
         clock = pygame.time.Clock()
