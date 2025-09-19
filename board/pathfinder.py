@@ -14,7 +14,7 @@ class Pathfinder:
             "water": math.inf
         }
 
-    def neighbors(self, hex_):
+    def neighbors(self, hex_, consider_terrain: bool=True):
         if hex_.q % 2 == 0:
             deltas = [(+1, 0), (-1, 0), (0, -1), (0, +1), (+1, -1), (-1, -1)]
         else:  # odd-q
@@ -23,7 +23,10 @@ class Pathfinder:
         result = []
         for dq, dr in deltas:
             n = self.grid.get_hex(hex_.q + dq, hex_.r + dr)
-            if n and self.terrain_costs[n.terrain] != math.inf:
+            if consider_terrain:
+                if n and self.terrain_costs[n.terrain] != math.inf:
+                    result.append(n)
+            else:
                 result.append(n)
         return result
 

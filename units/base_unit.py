@@ -1,3 +1,6 @@
+from board.hex import Hex
+
+
 class BaseUnit:
     def __init__(
             self,
@@ -21,6 +24,13 @@ class BaseUnit:
         self.base_orientation = base_orientation % 6
         self.turret_orientation = turret_orientation % 6
 
+        self.lock_turret = True
+
+    def turn_to_hex(self, target_hex: Hex):
+        dq = target_hex.q - self.position.q
+        dr = target_hex.r - self.position.r
+        self.update_orientation(dq, dr)
+
     def update_orientation(self, dq, dr):
         if self.position.q % 2 == 0:
             deltas = [(0,-1),(1,-1),(1,0),(0,1),(-1,0),(-1,-1)]
@@ -32,7 +42,10 @@ class BaseUnit:
                 if i != opposite:
                     self.base_orientation = i
                 break
+        if self.lock_turret:
+            self.set_turret_orientation(self.base_orientation)
 
+    # [obsolete]
     def move(self, target_hex):
         if self.position:
             dq = target_hex.q - self.position.q

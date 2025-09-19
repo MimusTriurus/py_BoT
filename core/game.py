@@ -28,7 +28,7 @@ class Game:
         tank.base_orientation = 2
         tank.turret_orientation = 2
 
-        start_hex = self.state.grid.get_hex(0, 0)
+        start_hex = self.state.grid.get_hex(5, 5)
         start_hex.unit = tank
         tank.set_base_position(start_hex)
 
@@ -57,9 +57,8 @@ class Game:
 
         for row in self.state.grid.grid:
             for hex_ in row:
-                #if hex_ not in self.state.highlighted_hexes:
-                    center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
-                    draw_hex(self.screen, center, self.hex_size, hex_, highlight=False)
+                center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
+                draw_hex(self.screen, center, self.hex_size, hex_, highlight=False)
 
         if self.state.value == State.Base:
             if self.state.selected_hex:
@@ -81,6 +80,12 @@ class Game:
                     if hex_ in self.state.highlighted_hexes:
                         center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
                         draw_hex(self.screen, center, self.hex_size, hex_, highlight=True, highlight_color=(0, 0, 255))
+        elif self.state.value == State.ReadyToTurnBase or self.state.value == State.ReadyToTurnTurret:
+            selection_color = (0, 255, 0) if self.state.value == State.ReadyToTurnBase else (0, 0, 255)
+            neighbors = self.pathfinder.neighbors(self.state.selected_unit.position, False)
+            for hex_ in neighbors:
+                center = hex_to_pixel(hex_.q, hex_.r, self.hex_size)
+                draw_hex(self.screen, center, self.hex_size, hex_, highlight=True, highlight_color=selection_color)
 
         for row in self.state.grid.grid:
             for hex_ in row:

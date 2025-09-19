@@ -39,6 +39,9 @@ class EventManager:
             self.state.selected_unit = None
             self.state.highlighted_hexes = []
             self.state.value = State.IsMoving
+        elif self.state.value == State.ReadyToTurnBase:
+            self.state.selected_unit.turn_to_hex(h)
+
 
     def handle_mouse_move(self, pos, game):
         col, row = pixel_to_hex(pos[0], pos[1], self.state.hex_size)
@@ -56,9 +59,11 @@ class EventManager:
 
     def handle_key_press(self, key, game):
         if game.state.selected_unit:
-            if key == 49:
+            if key == 49:   # режим движения
                 game.state.value = State.ReadyToMove
-            elif key == 50:
+            elif key == 50: # режим поворота корпуса
                 game.state.value  = State.ReadyToTurnBase
-            elif key == 51:
+            elif key == 51: # режим поворота башни
                 game.state.value  = State.ReadyToTurnTurret
+            elif key == 52: # блокировка\разблокировка башни
+                game.state.selected_unit.lock_turret = not game.state.selected_unit.lock_turret
